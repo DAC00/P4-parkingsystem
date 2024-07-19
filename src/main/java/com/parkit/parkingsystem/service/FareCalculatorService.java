@@ -17,7 +17,11 @@ public class FareCalculatorService {
         Instant inHour = ticket.getInTime().toInstant();
         Instant outHour= ticket.getOutTime().toInstant();
         Duration durationBetweenInOut = Duration.between(inHour, outHour);
-        double duration = ((double)durationBetweenInOut.toMinutes()) / 60;
+
+        double duration = 0;
+        if(durationBetweenInOut.toMinutes()>=30){
+            duration = ((double)durationBetweenInOut.toMinutes()) / 60;
+        }
 
         switch (ticket.getParkingSpot().getParkingType()){
             case CAR: {
