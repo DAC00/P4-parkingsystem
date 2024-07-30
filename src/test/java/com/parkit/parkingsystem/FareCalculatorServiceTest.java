@@ -94,7 +94,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(Date.from(outTime));
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals((0.75 * Fare.BIKE_RATE_PER_HOUR), ticket.getPrice() );
+        assertEquals(fareCalculatorService.roundingPrice((0.75 * Fare.BIKE_RATE_PER_HOUR)), ticket.getPrice() );
     }
 
     @Test
@@ -107,7 +107,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(Date.from(outTime));
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( (0.75 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+        assertEquals(fareCalculatorService.roundingPrice((0.75 * Fare.CAR_RATE_PER_HOUR)), ticket.getPrice());
     }
 
     @Test
@@ -120,7 +120,7 @@ public class FareCalculatorServiceTest {
         ticket.setOutTime(Date.from(outTime));
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
-        assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
+        assertEquals(fareCalculatorService.roundingPrice(24 * Fare.CAR_RATE_PER_HOUR), ticket.getPrice());
     }
 
     @Test
@@ -147,5 +147,31 @@ public class FareCalculatorServiceTest {
         ticket.setParkingSpot(parkingSpot);
         fareCalculatorService.calculateFare(ticket);
         assertEquals(0, ticket.getPrice());
+    }
+
+    @Test
+    public void calculateFareCarWithDiscount(){
+        Instant outTime = Instant.now();
+        Instant inTime = outTime.minus(3, ChronoUnit.DAYS);
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
+
+        ticket.setInTime(Date.from(inTime));
+        ticket.setOutTime(Date.from(outTime));
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket,true);
+        assertEquals((fareCalculatorService.roundingPrice((72 * Fare.CAR_RATE_PER_HOUR) * 0.95)), ticket.getPrice());
+    }
+
+    @Test
+    public void calculateFareBikeWithDiscount(){
+        Instant outTime = Instant.now();
+        Instant inTime = outTime.minus(2, ChronoUnit.DAYS);
+        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+
+        ticket.setInTime(Date.from(inTime));
+        ticket.setOutTime(Date.from(outTime));
+        ticket.setParkingSpot(parkingSpot);
+        fareCalculatorService.calculateFare(ticket, true);
+        assertEquals(fareCalculatorService.roundingPrice((48 * Fare.BIKE_RATE_PER_HOUR) * 0.95), ticket.getPrice());
     }
 }
