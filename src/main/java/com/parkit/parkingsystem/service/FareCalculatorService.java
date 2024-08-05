@@ -5,7 +5,6 @@ import com.parkit.parkingsystem.model.Ticket;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.Instant;
 
@@ -41,7 +40,7 @@ public class FareCalculatorService {
                     break;
                 }
                 default:
-                    throw new IllegalArgumentException("Unkown Parking Type");
+                    throw new IllegalArgumentException("Unknown Parking Type");
             }
         }else{
             ticket.setPrice(0);
@@ -52,7 +51,7 @@ public class FareCalculatorService {
         calculateFare(ticket, false);
     }
 
-    public double roundingPrice(double originalPrice){
+    private double roundingPrice(double originalPrice){
         BigDecimal priceRounded = new BigDecimal(String.valueOf(originalPrice)).setScale(2, RoundingMode.HALF_UP);
         return priceRounded.doubleValue();
     }
