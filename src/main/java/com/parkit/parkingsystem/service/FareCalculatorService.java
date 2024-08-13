@@ -6,22 +6,23 @@ import com.parkit.parkingsystem.model.Ticket;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.Duration;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 public class FareCalculatorService {
 
     public void calculateFare(Ticket ticket, boolean discount){
 
-        if( (ticket.getOutTime() == null) || (ticket.getOutTime().before(ticket.getInTime())) ){
+        if( (ticket.getOutTime() == null) || (ticket.getOutTime().isBefore(ticket.getInTime()))){
             throw new IllegalArgumentException("Out time provided is incorrect:"+ticket.getOutTime().toString());
         }
 
-        Instant inTime = ticket.getInTime().toInstant();
-        Instant outTime = ticket.getOutTime().toInstant();
+        LocalDateTime inTime = ticket.getInTime();
+        LocalDateTime outTime = ticket.getOutTime();
         Duration durationBetweenInOut = Duration.between(inTime, outTime);
 
         if(durationBetweenInOut.toMinutes()>=30) {
-            double duration = ((double) durationBetweenInOut.toMinutes()) / 60;
+            double duration = (((double) durationBetweenInOut.toMinutes()) / 60);
+            //double duration = (((double) durationBetweenInOut.toMillis()) / 3600) / 1000;
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
                     if(discount){

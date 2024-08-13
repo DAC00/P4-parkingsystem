@@ -9,7 +9,8 @@ import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 
 public class ParkingService {
 
@@ -19,7 +20,7 @@ public class ParkingService {
 
     private InputReaderUtil inputReaderUtil;
     private ParkingSpotDAO parkingSpotDAO;
-    private  TicketDAO ticketDAO;
+    private TicketDAO ticketDAO;
 
     public ParkingService(InputReaderUtil inputReaderUtil, ParkingSpotDAO parkingSpotDAO, TicketDAO ticketDAO){
         this.inputReaderUtil = inputReaderUtil;
@@ -35,7 +36,7 @@ public class ParkingService {
                 parkingSpot.setAvailable(false);
                 parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
 
-                Date inTime = new Date();
+                LocalDateTime inTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
                 Ticket ticket = new Ticket();
                 //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
                 //ticket.setId(ticketID);
@@ -48,8 +49,8 @@ public class ParkingService {
 
 
                 System.out.println("Generated Ticket and saved in DB");
-                System.out.println("Please park your vehicle in spot number: "+parkingSpot.getId());
-                System.out.println("Recorded in-time for vehicle number: "+vehicleRegNumber+" is: "+inTime);
+                System.out.println("Please park your vehicle in spot number: " + parkingSpot.getId());
+                System.out.println("Recorded in-time for vehicle number: " + vehicleRegNumber + " is: " + inTime);
 
                 if(ticketDAO.getNbTicket(ticket.getVehicleRegNumber()) > 1){
                     System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de notre parking, vous allez obtenir une remise de 5%");
@@ -107,7 +108,7 @@ public class ParkingService {
         try{
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);
-            Date outTime = new Date();
+            LocalDateTime outTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
             ticket.setOutTime(outTime);
 
             if(ticketDAO.getNbTicket(ticket.getVehicleRegNumber()) > 1){
