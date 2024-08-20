@@ -18,9 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -48,11 +46,6 @@ public class ParkingDataBaseIT {
     public void setUpPerTest() throws Exception {
         when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(carRegistrationNumber);
         dataBasePrepareService.clearDataBaseEntries();
-    }
-
-    @AfterAll
-    public static void tearDown(){
-
     }
 
     @Test
@@ -95,7 +88,7 @@ public class ParkingDataBaseIT {
     public void  testParkingLotExitRecurringUser(){
         testParkingLotExit();
 
-        LocalDateTime inTime = LocalDateTime.now().minusHours(1).minusMinutes(40).truncatedTo(ChronoUnit.SECONDS);
+        LocalDateTime inTime = LocalDateTime.now().minusHours(1).truncatedTo(ChronoUnit.SECONDS);
 
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         FareCalculatorService fareCalculatorService = new FareCalculatorService();
