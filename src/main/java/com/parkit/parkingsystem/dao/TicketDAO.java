@@ -30,12 +30,13 @@ public class TicketDAO {
             ps.setDouble(3, ticket.getPrice());
             ps.setObject(4, ticket.getInTime());
             ps.setObject(5, ticket.getOutTime() == null ? null : ticket.getOutTime());
-            return ps.execute();
+            ps.execute();
+            return true;
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
+            return false;
         }finally {
             dataBaseConfig.closeConnection(con);
-            return false;
         }
     }
 
@@ -64,8 +65,8 @@ public class TicketDAO {
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return ticket;
         }
+        return ticket;
     }
 
     public boolean updateTicket(Ticket ticket) {
@@ -80,10 +81,10 @@ public class TicketDAO {
             return true;
         }catch (Exception ex){
             logger.error("Error saving ticket info",ex);
+            return false;
         }finally {
             dataBaseConfig.closeConnection(con);
         }
-        return false;
     }
 
     public int getNbTicket(String vehicleRegNumber){

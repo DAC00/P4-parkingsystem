@@ -34,26 +34,25 @@ public class ParkingService {
             if(parkingSpot !=null && parkingSpot.getId() > 0){
                 String vehicleRegNumber = getVehicleRegNumber();
                 parkingSpot.setAvailable(false);
-                parkingSpotDAO.updateParking(parkingSpot);//allot this parking space and mark it's availability as false
+                parkingSpotDAO.updateParking(parkingSpot);
 
                 LocalDateTime inTime = LocalDateTime.now().truncatedTo(ChronoUnit.SECONDS);
                 Ticket ticket = new Ticket();
-                //ID, PARKING_NUMBER, VEHICLE_REG_NUMBER, PRICE, IN_TIME, OUT_TIME)
-                //ticket.setId(ticketID);
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
-                ticketDAO.saveTicket(ticket);
+                if(ticketDAO.saveTicket(ticket)){
+                    System.out.println("Generated Ticket and saved in DB");
+                    System.out.println("Please park your vehicle in spot number: " + parkingSpot.getId());
+                    System.out.println("Recorded in-time for vehicle number: " + vehicleRegNumber + " is: " + inTime);
 
-
-                System.out.println("Generated Ticket and saved in DB");
-                System.out.println("Please park your vehicle in spot number: " + parkingSpot.getId());
-                System.out.println("Recorded in-time for vehicle number: " + vehicleRegNumber + " is: " + inTime);
-
-                if(ticketDAO.getNbTicket(ticket.getVehicleRegNumber()) > 1){
-                    System.out.println("Heureux de vous revoir ! En tant qu’utilisateur régulier de notre parking, vous allez obtenir une remise de 5%");
+                    if(ticketDAO.getNbTicket(ticket.getVehicleRegNumber()) > 1){
+                        System.out.println("Happy to see you again! As a regular user of our parking, you will receive a 5% discount.");
+                    }
+                }else{
+                    System.out.println("Unable to generate a Ticket and save in DB");
                 }
             }
         }catch(Exception e){

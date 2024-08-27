@@ -167,7 +167,7 @@
                                     </includes>
                                 </fileSet>
                             </fileSets>
-                            <destFile>target/site/jacoco-merge/allTest.exec</destFile>
+                            <destFile>target/site/jacoco-merge-report/allTest.exec</destFile>
                         </configuration>
                     </execution>
                     <execution>
@@ -177,8 +177,8 @@
                             <goal>report</goal>
                         </goals>
                         <configuration>
-                            <dataFile>target/site/jacoco-merge/allTest.exec</dataFile>
-                            <outputDirectory>target/site/jacoco-merge</outputDirectory>
+                            <dataFile>target/site/jacoco-merge-report/allTest.exec</dataFile>
+                            <outputDirectory>target/site/jacoco-merge-report</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

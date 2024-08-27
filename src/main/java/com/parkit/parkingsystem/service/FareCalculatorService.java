@@ -22,7 +22,6 @@ public class FareCalculatorService {
 
         if(durationBetweenInOut.toMinutes()>=30) {
             double duration = (((double) durationBetweenInOut.toMinutes()) / 60);
-            //double duration = (((double) durationBetweenInOut.toMillis()) / 3600) / 1000;
             switch (ticket.getParkingSpot().getParkingType()) {
                 case CAR: {
                     if(discount){
